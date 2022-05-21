@@ -1,0 +1,169 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
+USE `mydb` ;
+
+-- -----------------------------------------------------
+-- Table `mydb`.`cast`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`cast` (
+  `Cast_ID` INT(11) NOT NULL,
+  `Cast_name` VARCHAR(45) NOT NULL,
+  `Movie_ID` VARCHAR(45) NOT NULL,
+  `Gender` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`Cast_ID`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`tvshows`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`tvshows` (
+  `Movie_ID` INT(11) NOT NULL,
+  `Movie_title` VARCHAR(45) NOT NULL,
+  `Release_date` VARCHAR(45) NOT NULL,
+  `Rating` DOUBLE NOT NULL,
+  `Episodes` INT(11) NOT NULL,
+  `Seasons` INT(11) NOT NULL,
+  `Popularity` DOUBLE NOT NULL,
+  PRIMARY KEY (`Movie_ID`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`acted_in`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`acted_in` (
+  `Movie_ID` INT(11) NOT NULL,
+  `Cast_ID` INT(11) NOT NULL,
+  PRIMARY KEY (`Movie_ID`, `Cast_ID`),
+  INDEX `Cast_ID` (`Cast_ID` ASC) VISIBLE,
+  CONSTRAINT `acted_in_ibfk_1`
+    FOREIGN KEY (`Cast_ID`)
+    REFERENCES `mydb`.`cast` (`Cast_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `acted_in_ibfk_2`
+    FOREIGN KEY (`Movie_ID`)
+    REFERENCES `mydb`.`tvshows` (`Movie_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`genre`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`genre` (
+  `Genre_ID` INT(11) NOT NULL,
+  `Genre_name` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`Genre_ID`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`belongs_to`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`belongs_to` (
+  `Movie_ID` INT(11) NOT NULL,
+  `Genre_ID` INT(11) NOT NULL,
+  PRIMARY KEY (`Movie_ID`, `Genre_ID`),
+  INDEX `fk_TV shows/Movies_has_Genre_Genre1` (`Genre_ID` ASC) VISIBLE,
+  CONSTRAINT `fk_TV shows/Movies_has_Genre_Genre1`
+    FOREIGN KEY (`Genre_ID`)
+    REFERENCES `mydb`.`genre` (`Genre_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_TV shows/Movies_has_Genre_TV shows/Movies`
+    FOREIGN KEY (`Movie_ID`)
+    REFERENCES `mydb`.`tvshows` (`Movie_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`customer_account`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`customer_account` (
+  `Customer_ID` INT(11) NOT NULL,
+  `Fname` VARCHAR(45) NOT NULL,
+  `Lname` VARCHAR(45) NOT NULL,
+  `Email` VARCHAR(45) NOT NULL,
+  `Password` VARCHAR(45) NOT NULL,
+  `Credit_card_number` INT(11) NOT NULL,
+  `Mobile_number` INT(11) NOT NULL,
+  PRIMARY KEY (`Customer_ID`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`payment`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`payment` (
+  `Payment_ID` INT(11) NULL DEFAULT NULL,
+  `Price` INT(11) NULL DEFAULT NULL,
+  `Subscription_type` TEXT NULL DEFAULT NULL,
+  `Subscription_date` TEXT NULL DEFAULT NULL,
+  `Customer_ID` INT(11) NULL DEFAULT NULL)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`subscription`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`subscription` (
+  `Payment_ID` INT(11) NULL DEFAULT NULL,
+  `Price` INT(11) NULL DEFAULT NULL,
+  `Subscription_type` TEXT NULL DEFAULT NULL,
+  `Subscription_date` TEXT NULL DEFAULT NULL,
+  `Customer_ID` INT(11) NULL DEFAULT NULL)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`watches`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`watches` (
+  `Movie_ID` INT(11) NOT NULL,
+  `Customer ID` INT(11) NOT NULL,
+  `Views_counted` INT(11) NOT NULL,
+  PRIMARY KEY (`Movie_ID`, `Customer ID`),
+  INDEX `fk_TV shows/Movies_has_Customer Account_Customer Account1` (`Customer ID` ASC) VISIBLE,
+  CONSTRAINT `fk_TV shows/Movies_has_Customer Account_Customer Account1`
+    FOREIGN KEY (`Customer ID`)
+    REFERENCES `mydb`.`customer_account` (`Customer_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_TV shows/Movies_has_Customer Account_TV shows/Movies1`
+    FOREIGN KEY (`Movie_ID`)
+    REFERENCES `mydb`.`tv shows_movies` (`Movie_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
